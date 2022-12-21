@@ -32,7 +32,7 @@ const TeamSchema = new mongoose.Schema(
         , secret_key: { type: String, trim: true, index: true, default: func_fiveRandomChars(), unique: true }
         , members: { type: String, trim: true, default: "" }
         , marks: { type: [Object], default: [] }    //tasks
-        , total_mark: { type: Number, default: 0 }
+        , total_mark: { type: Number, default: 0, index: -1 }
         , createdAt: { type: Date, index: -1 },
     }
     , { timestamps: true, }
@@ -54,14 +54,14 @@ const TaskModel = mongoose1.model("Task", TaskSchema); //tasks
 const calculateTeamMarks = async (team) => {
     let totalMark = 0;
     team.marks.map(async (task) => {
-        totalMark += task.mark * 1;
+        if (task.mark != NaN)
+            totalMark += task.mark * 1;
     });
 
-    console.log(totalMark)
     try {
         //can check the availability from db of the tas;
         const filter = { _id: team._id.toString() };
-        const data = { $set: { total_mark: totalMark } };
+        const data = { $set: { total_mark: totalMark || 0 } };
         console.log(team._id.toString())
         const update = await TeamModel.findOneAndUpdate(filter, data);
         if (!update) throw new Error('cant update team total mark');
@@ -98,9 +98,37 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(__dirname, 'client')));    //public folder
 app.route("/").all(async (req, res) => { return res.sendFile(path.join(__dirname + 'client/index.html')); });
+app.route("/total").all(async (req, res) => { return res.sendFile(path.join(__dirname + 'client/total/index.html')); });
 app.route("/test").all(async (req, res) => {
     return res.status(200).send("server test");
 });
+
+app.route('/api/total/')
+    .get(async (req, res) => {
+        console.log("GET /api/total load teams amd total marks for the tasks");
+        try {
+            let filter = {};
+            const sort = { total_mark: -1 };
+
+            try {
+                await countTotalMark();
+            } catch (e) { }
+
+
+            const teams = await TeamModel.find(filter).sort(sort);
+            if (!teams) throw new Error("no teams found");
+
+            const result = teams.map(
+                (team) => {
+                    let task_done = 0;
+                    team.marks.map((x) => { task_done += (x && x !== 0 && typeof (x) === 'number') ? x : 0; });
+
+                    return ({ team_id: team.team_id, team_members: team.members, total_mark: team.total_mark, task_done: task_done });
+                }
+            );
+            return res.status(200).json(result);   //array
+        } catch (e) { return res.status(400).send(JSON.stringify(e)); }
+    });
 
 
 app.route('/api/selected/:team_id')
