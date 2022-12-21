@@ -1,5 +1,5 @@
 
-const fetchURL = 'http://localhost:1333/api/selected/';
+const fetchURL = 'https://2022.zionet.online/selected/';
 
 const finishLoaded = (callback) => { document.addEventListener('DOMContentLoaded', async () => { await callback(); }); };
 const elementApp = document.querySelector('#app');
