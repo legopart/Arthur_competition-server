@@ -121,8 +121,11 @@ app.route('/api/total/')
             const result = teams.map(
                 (team) => {
                     let task_done = 0;
-                    team.marks.map((x) => { task_done += (x && x !== 0 && typeof (x) === 'number') ? x : 0; });
-
+                    team.marks.map((x) => {
+                        try {
+                            task_done += x.mark * 1 > 0 ? 1 : 0;
+                        } catch (e) { }
+                    });
                     return ({ team_id: team.team_id, team_members: team.members, total_mark: team.total_mark, task_done: task_done });
                 }
             );
