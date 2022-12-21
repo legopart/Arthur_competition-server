@@ -125,7 +125,9 @@ app.route('/api/total/')
                         try {
                             task_done += x.mark * 1 > 0 ? 1 : 0;
                         } catch (e) { }
+
                     });
+
                     return ({ team_id: team.team_id, team_members: team.members, total_mark: team.total_mark, task_done: task_done });
                 }
             );
