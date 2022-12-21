@@ -1,0 +1,90 @@
+@hostname = http://localhost:1333
+
+
+### Create a Team
+post {{hostname}}/api/teams
+Content-Type: application/json
+
+{
+
+}
+
+
+### Get all teams + count total
+get {{hostname}}/api/teams
+Content-Type: application/json
+
+{
+
+}
+
+
+### Patch team members
+patch {{hostname}}/api/teams
+Content-Type: application/json
+
+{
+    "team_id": "63a26c8ebb51eeab89c8cf81"
+    , "members": "ooooooooooooo"
+}
+
+
+
+### Patch team task marks and set select
+patch {{hostname}}/api/teams
+Content-Type: application/json
+
+{
+    "team_id": "63a26c8ebb51eeab89c8cf81"
+    , "task_id": "63a277194036ebebc1555b26"
+    , "mark": 10
+    , "select": true
+}
+
+### Get selected tasks for a team
+get {{hostname}}/api/selected/mg7pd
+Content-Type: application/json
+
+{
+
+}
+
+
+
+
+
+
+
+#
+
+#
+
+#
+
+#Tasks
+
+### Create a Task
+post {{hostname}}/api/tasks
+Content-Type: application/json
+
+{
+
+}
+
+### Get all tasks
+get {{hostname}}/api/tasks
+Content-Type: application/json
+
+{
+
+}
+
+
+### Patch update task
+patch {{hostname}}/api/tasks
+Content-Type: application/json
+
+{
+    "task_id": "63a277194036ebebc1555b26"
+    , "title": "aaaaaaa"
+}
