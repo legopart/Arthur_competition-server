@@ -28,14 +28,14 @@ const loadElements = async () => {
 
 
         let teamList = '';
-
+        console.log('results', results)
         results.map((team) => {
             try {
                 console.log('team', team)
                 const team_id = team.team_id || '?';
                 const team_members = team.team_members || '?';
-                const total_mark = team.total_mark === 0 ? '0' : x || '?';
-                const task_done = team.task_done === 0 ? '0' : x || '?';
+                const total_mark = team.total_mark || 0;
+                const task_done = team.task_done || 0;
                 console.log(team_id, team_members, total_mark, task_done)
                 teamList += taskElement(team_id, team_members, total_mark, task_done);
             } catch (e) { }
