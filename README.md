@@ -13,7 +13,7 @@ https://2022.zionet.online/#cx9tc
 
 amdmin side
 
-https://github.com/w3arthur/competition-admin/tree/master
+https://github.com/w3arthur/competition-admin/
 
 https://shifke.zionet.online/#arthur55
 
